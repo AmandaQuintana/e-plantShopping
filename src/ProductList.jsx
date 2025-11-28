@@ -2,15 +2,20 @@ import React, { useState } from 'react';
 import './ProductList.css';
 import CartItem from './CartItem';
 
-// 🔹 IMPORTS PARA EL CARRITO (Redux)
-import { useDispatch } from 'react-redux';
+// IMPORTS PARA EL CARRITO (Redux)
+import { useDispatch, useSelector } from 'react-redux';
 import { addItem } from './CartSlice';
 
 function ProductList({ onHomeClick }) {
     const [showCart, setShowCart] = useState(false);
     const [showPlants, setShowPlants] = useState(false);
+    const cartItems = useSelector(state => state.cart.items);
 
-    // 🔹 Estado para marcar qué productos ya se añadieron
+    const calculateTotalQuantity = () => {
+        return cartItems ? cartItems.reduce((total, item) => total + item.quantity, 0) : 0;
+    };
+
+    // Estado para marcar qué productos ya se añadieron
     const [addedToCart, setAddedToCart] = useState({});
     const dispatch = useDispatch();
 
@@ -309,6 +314,9 @@ function ProductList({ onHomeClick }) {
                                         strokeWidth="2"
                                     ></path>
                                 </svg>
+                                <span className="cart_quantity_count">
+                                    {calculateTotalQuantity()}
+                                </span>
                             </h1>
                         </a>
                     </div>
